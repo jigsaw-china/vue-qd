@@ -11,9 +11,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "bootstrap": "^4.1.1",
+    "axios": "^0.18.0",
     "element-ui": "^2.3.8",
     "vue": "^2.5.2",
+    "vue-codemirror": "^4.0.5",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

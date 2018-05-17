@@ -14,7 +14,7 @@ export default new Router({
       component: Home
     },
     {
-      path: '/site',
+      path: '/site/:id',
       name: 'Site',
       component: Site
     }

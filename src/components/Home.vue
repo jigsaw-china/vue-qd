@@ -1,46 +1,18 @@
 <template>
-  <div class="hello">
+  <div class="home">
     <qd-header></qd-header>
-    <qdBanner></qdBanner>
+    <qd-banner></qd-banner>
     <qd-nav></qd-nav>
     <div class="container-fluid m" id="zt">
-      <div class="container m0 bod">
-        <ol class="breadcrumb jjk20 z16 top10">
-          <li><b><i class="fa fa-code"></i>最新插件</b> <span class="zhe">Latest jQuery plugin</span></li>
-        </ol>
-
-        <div class="col-lg-4 col-md-3 col-sm-4">
-          <a href="http://www.jq22.com/jquery-info18998" target="_blank">
-            <img src="http://assets.jq22.com/plugin/2018-05-16-00-59-21.png"></a>
-          <div class="cover-info">
-            <a href="http://www.jq22.com/jquery-info18998" target="_blank">
-              <h4>jQuery大图切换带文字动态效果</h4>
-            </a>
-            <small>前人种树后人乘凉，在原基础上修改样式，感觉这样之后比较常用</small>
-          </div>
-          <div class="cover-fields">
-            <i class="fa fa-list-ul"></i>&nbsp;
-            幻灯片和轮播图
-          </div>
-          <div class="cover-stat">
-            <i class="fa fa-eye"></i><span class="f10">&nbsp;705</span>
-            <i class="fa fa-heart"></i><span class="f10"> &nbsp;11</span>
-            <div class="cover-yh">
-              <a href="mem31852" data-container="body" data-toggle="popover" data-placement="top" data-content="SunRoad ">
-                <i class="fa fa-user-secret"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="posts-nav-wrap" style="margin-bottom: 30px">
-          <ul class="posts-nav">
-            <li class="next"><a href="jq1-jq" class="next">←</a></li>
-          </ul>
-        </div>
+      <div class="m0 bod">
+        <qd-main
+          v-for="item in mains"
+          v-bind:key="item.id"
+          v-bind:title="item.title"
+          v-bind:sites="item.sites"
+        ></qd-main>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -48,24 +20,66 @@
 import qdHeader from '@/components/Header'
 import qdBanner from '@/components/Banner'
 import qdNav from '@/components/Nav'
+import qdMain from '@/components/Main'
 
 export default {
   name: 'Home',
+  created () {
+    // 热门
+    this.$http.get('/api/v1/sites?type=hot')
+      .then((response) => {
+        const result = response.data
+        this.mains[0].sites = result.data
+      })
+    // 最新
+    this.$http.get('/api/v1/sites?type=new')
+      .then((response) => {
+        const result = response.data
+        this.mains[1].sites = result.data
+      })
+    // 常用
+    this.$http.get('/api/v1/sites?type=com')
+      .then((response) => {
+        const result = response.data
+        this.mains[2].sites = result.data
+      })
+  },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      mains: [
+        {
+          id: 1,
+          title: '热门模板',
+          sites: ''
+        },
+        {
+          id: 2,
+          title: '最新模板',
+          sites: ''
+        },
+        {
+          id: 3,
+          title: '常用模板',
+          sites: ''
+        }
+      ]
     }
   },
   components: {
     qdHeader,
     qdBanner,
-    qdNav
+    qdNav,
+    qdMain
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+  .col-md-3 > a{
+    height: 200px;
+    overflow: hidden;
+  }
   .m, .mn {
     margin-top: 455px
   }
