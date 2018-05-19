@@ -29,11 +29,11 @@
       </div>
     </div>
 
-    <div class="posts-nav-wrap" style="margin-bottom: 30px">
-      <ul class="posts-nav">
-        <li class="next"><a href="jq1-jq" class="next">←</a></li>
-      </ul>
-    </div>
+    <!--<div class="posts-nav-wrap" style="margin-bottom: 30px">-->
+      <!--<ul class="posts-nav">-->
+        <!--<li class="next"><a href="javascript:;" class="next">←</a></li>-->
+      <!--</ul>-->
+    <!--</div>-->
   </div>
 </template>
 

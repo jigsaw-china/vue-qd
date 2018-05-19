@@ -14,7 +14,7 @@
       <div id="n1" class="nav-zi ty" style="display: none;">
         <ul v-for="(item,index) in cates" :key="item.id" :id="'nz' + (index + 1)" class="nn list-inline container m0" style="display: none;">
           <li v-for="tag in item.tags" :key="'tag' + tag.id">
-            <a class="c-btn c-btn--border-line">
+            <a class="c-btn c-btn--border-line" @click.stop="addTags(tag.id)" :class="{ active: tags.includes(tag.id) }">
               <i class="fa ls"></i>{{ tag.title }}
             </a>
           </li>
@@ -40,10 +40,18 @@ export default {
   },
   data () {
     return {
-      cates: ''
+      cates: '',
+      tags: []
     }
   },
   methods: {
+    addTags (id) {
+      if (this.tags.includes(id)) {
+        this.tags.splice(this.tags.indexOf(id), 1)
+      } else {
+        this.tags.push(id)
+      }
+    },
     navHover () {
       $(function () {
         var sz = {}
@@ -70,6 +78,13 @@ export default {
           $('.nzz').removeClass('nav-zibg')
         })
       })
+    }
+  },
+  watch: {
+    tags: {
+      handler (val) {
+        this.$emit('navEv', val)
+      }
     }
   }
 }

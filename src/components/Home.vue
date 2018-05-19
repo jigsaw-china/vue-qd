@@ -1,18 +1,25 @@
 <template>
   <div class="home">
     <qd-header></qd-header>
-    <qd-banner></qd-banner>
-    <qd-nav></qd-nav>
+    <qd-banner @searchEv="search"></qd-banner>
+    <qd-nav @navEv="tagsClick"></qd-nav>
     <div class="container-fluid m" id="zt">
       <div class="m0 bod">
         <qd-main
+          v-show="!filters.active"
           v-for="item in mains"
           v-bind:key="item.id"
           v-bind:title="item.title"
           v-bind:sites="item.sites"
         ></qd-main>
+        <qd-main
+          v-show="filters.active"
+          v-bind:title="filters.title"
+          v-bind:sites="filters.sites"
+        ></qd-main>
       </div>
     </div>
+    <qd-footer></qd-footer>
   </div>
 </template>
 
@@ -21,6 +28,7 @@ import qdHeader from '@/components/Header'
 import qdBanner from '@/components/Banner'
 import qdNav from '@/components/Nav'
 import qdMain from '@/components/Main'
+import qdFooter from '@/components/Footer'
 
 export default {
   name: 'Home',
@@ -62,14 +70,46 @@ export default {
           title: '常用模板',
           sites: ''
         }
-      ]
+      ],
+      filters: {
+        title: '筛选结果',
+        sites: [],
+        active: false
+      }
+    }
+  },
+  methods: {
+    tagsClick (tags) {
+      if (tags.length > 0) {
+        this.$http.get('/api/v1/sites?tags=' + tags.toString())
+          .then((response) => {
+            const result = response.data
+            this.filters.sites = result.data
+            this.filters.active = true
+          })
+      } else {
+        this.filters.active = false
+      }
+    },
+    search (keyword) {
+      if (keyword) {
+        this.$http.get('/api/v1/search?keyword=' + keyword)
+          .then((response) => {
+            const result = response.data
+            this.filters.sites = result.data
+            this.filters.active = true
+          })
+      } else {
+        this.filters.active = false
+      }
     }
   },
   components: {
     qdHeader,
     qdBanner,
     qdNav,
-    qdMain
+    qdMain,
+    qdFooter
   }
 }
 </script>
